@@ -41,6 +41,10 @@
           return li;
         };
       })();
+      function isNimble(){ return true; }
+      var canFly = function(){ return true; };
+      window.isDeadly = function(){ return true; };
+      window.wieldsSword = function swingsSword() { return true; };
       window.onload = function() {
         test("Async Test #1", function() {
           pause();
@@ -52,11 +56,26 @@
         test("Async Test #2", function() {
           pause();
           setTimeout(function() {
-            assert(true, "Second test completed");
+						assert(typeof window.isNimble === "function","isNimble() defined");
+						assert(isNimble.name === "isNimble","isNimble() has a name");
+						assert(typeof window.canFly === "function","canFly() defined");
+						assert(canFly.name === "","canFly() has no name");
+						assert(typeof window.isDeadly === "function","isDeadly() defined");
+						function outer(){
+							assert(typeof inner === "function","inner() in scope before declaration");
+							function inner(){}
+							assert(typeof inner === "function","inner() in scope after declaration");
+							assert(window.inner === undefined,"inner() not in global scope");
+						}
+						outer();
+						assert(window.inner === undefined,"inner() still not in global scope");
+						assert(window.wieldsSword.name === 'swingsSword',"wieldSword's real name is swingsSword");
             resume();
           }, 1000);
         });
       };
+			
+			
     </script>
     <style>
       #results li.pass {
