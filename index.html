@@ -1,93 +1,32 @@
+<!DOCTYPE html>
 <html>
-	<!-- with many thanks to regsig XD -->
   <head>
-    <title>Test Suite</title>
-    <script>
-      (function() {
-        var queue = [], paused = false, results;
-        this.test = function(name, fn) {
-          queue.push(function() {
-            results = document.getElementById("results");
-            results = assert(true, name).appendChild(
-                document.createElement("ul"));
-            fn();
-          });
-          runTest();
-        };
-        this.pause = function() {
-          paused = true;
-        };
-        this.resume = function() {
-          paused = false;
-          setTimeout(runTest, 1);
-        };
-        function runTest() {
-          if (!paused && queue.length) {
-            (queue.shift())();
-            if (!paused) {
-              resume();
-            }
-          }
-        }
-
-        this.assert = function assert(value, desc) {
-          var li = document.createElement("li");
-          li.className = value ? "pass" : "fail";
-          li.appendChild(document.createTextNode(desc));
-          results.appendChild(li);
-          if (!value) {
-            li.parentNode.parentNode.className = "fail";
-          }
-          return li;
-        };
-      })();
-      function isNimble(){ return true; }
-      var canFly = function(){ return true; };
-      window.isDeadly = function(){ return true; };
-      window.wieldsSword = function swingsSword() { return true; };
-      window.onload = function() {
-        test("Async Test #1", function() {
-          pause();
-          setTimeout(function() {
-            assert(true, "First test completed");
-            resume();
-          }, 1000);
-        });
-        test("Async Test #2", function() {
-          pause();
-          setTimeout(function() {
-						assert(typeof window.isNimble === "function","isNimble() defined");
-						assert(isNimble.name === "isNimble","isNimble() has a name");
-						assert(typeof window.canFly === "function","canFly() defined");
-						assert(canFly.name === "","canFly() has no name");
-						assert(typeof window.isDeadly === "function","isDeadly() defined");
-						function outer(){
-							assert(typeof inner === "function","inner() in scope before declaration");
-							function inner(){}
-							assert(typeof inner === "function","inner() in scope after declaration");
-							assert(window.inner === undefined,"inner() not in global scope");
-						}
-						outer();
-						assert(window.inner === undefined,"inner() still not in global scope");
-						assert(window.wieldsSword.name === 'swingsSword',"wieldSword's real name is swingsSword");
-            resume();
-          }, 1000);
-        });
-      };
-			
-			
-    </script>
-    <style>
-      #results li.pass {
-        color: green;
-      }
-
-      #results li.fail {
-        color: red;
-      }
-    </style>
+    <title>JS Test Suite</title>
+    <script type="text/javascript" src="js/assert.js"></script>
+    <link href="css/assert.css" rel="stylesheet" type="text/css">
   </head>
   <body>
-    <ul id="results"></ul>
+    <script type="text/javascript">
+
+      function creep(){ return this; }                     //#1
+      assert(creep() === window,                           //#1
+             "Creeping in the window");                    //#1
+
+      var sneak = creep;                                   //#3
+      assert(sneak() === window,                           //#4
+             "Sneaking in the window");                    //#4
+
+      var ninja1 = {                                       //#5
+        skulk: creep                                       //#5
+      };
+      assert(ninja1.skulk() === ninja1,                    //#6
+             "The 1st ninja is skulking");                 //#6
+
+      var ninja2 = {                                       //#7
+        skulk: creep                                       //#7
+      };
+      assert(ninja2.skulk() === ninja2,                    //#8
+             "The 2nd ninja is skulking");                 //#8
+    </script>
   </body>
 </html>
