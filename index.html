@@ -6,27 +6,19 @@
 		<link href="css/assert.css" rel="stylesheet" type="text/css">
 	</head>
 	<body>
-		<input id="first" />
-		<input id="second" />
 		<script type="text/javascript">
-			var elems = {
-				length : 0,
+			function smallest(array) {
+				return Math.min.apply(Math, array);
+			}
 
-				add : function(elem) {
-					console.log(this);
-					Array.prototype.push.call(this, elem);
-				},
+			function largest(array) {
+				return Math.max.apply(Math, array);
+			}
 
-				gather : function(id) {
-					this.add(document.getElementById(id));
-				}
-			};
-			elems.gather("first");
-			assert(elems.length == 1 && elems[0].nodeType,
-						"Verify we have an element in the stash");
-			elems.gather("second");
-			assert(elems.length == 2 && elems[1].nodeType,
-						"Verify the other insertion");
+			assert(smallest([0,1,2,3]) == 0,
+						"Located the smallest value");
+			assert(largest([0,1,2,3]) == 3,
+						"Located the largest value");
 		</script>
 	</body>
 </html>
