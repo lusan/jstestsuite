@@ -7,18 +7,22 @@
 	</head>
 	<body>
 		<script type="text/javascript">
-			function smallest(array) {
-				return Math.min.apply(Math, array);
+		function merge(root) {
+			for(var i=1; i < arguments.length ; i++) {
+				for(var key in arguments[i]) {
+					root[key] = arguments[i][key];
+				}
 			}
-
-			function largest(array) {
-				return Math.max.apply(Math, array);
-			}
-
-			assert(smallest([0,1,2,3]) == 0,
-						"Located the smallest value");
-			assert(largest([0,1,2,3]) == 3,
-						"Located the largest value");
+			return root;
+		}
+		var merged = merge(
+			{name : "Batou"},
+			{city: "Niihama"}
+		);
+		assert(merged.name == "Batou",
+					"The original name is intact");
+		assert(merged.city == "Niihama",
+					"And the city has been copied over");
 		</script>
 	</body>
 </html>
