@@ -7,20 +7,24 @@
 	</head>
 	<body>
 		<script type="text/javascript">
-		var outerValue = 'ninja';
-		var later;
-		function outerFunction() {
-			var innerValue = 'samurai';
+		function Ninja() {
+			var feints = 0;
 
-			function innerFunction() {
-				assert(outerValue, 'I can see the ninja');
-				assert(outerValue, 'I can see the samurai');
-			}
-			later = innerFunction;
+			this.getFeints = function() {
+				return feints;
+			};
+
+			this.feint = function() {
+				feints++;
+			};
 		}
-		outerFunction();
-		console.log(later);
-		later();
+
+		var ninja = new Ninja();
+		ninja.feint();
+		assert(ninja.getFeints() == 1,
+					"We're able to access the internal feint count.");
+		assert(ninja.feints === undefined,
+					"And the private data is inaccessible to us.");
 		</script>
 	</body>
 </html>
