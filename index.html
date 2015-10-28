@@ -7,12 +7,49 @@
 	</head>
 	<body>
 		<script type="text/javascript">
-		function multiMax(multi){
-			return multi * Math.max.apply(Math,
-				Array.prototype.slice.call(arguments,1)); //Fooling the slice() method into working on the arguments list(which is not an instance of array)
+		function addMethod(object, name, fn) {
+			var old = object[name];                        //#1
+			object[name] = function(){
+				if (fn.length == arguments.length)           //#2
+					return fn.apply(this, arguments)           //#2
+				else if (typeof old == 'function')           //#3
+					return old.apply(this, arguments);         //#3
+			};
 		}
-		assert(multiMax(3,1,2,3) == 9,
-					"3*3=9 (first argu,emt , by largest)");
+
+		var ninjas = {                                                    //#1
+		 values: ["Dean Edwards", "Sam Stephenson", "Alex Russell"]
+		};
+
+		addMethod(ninjas, "find", function(){                             //#2
+			return this.values;
+		});
+
+		addMethod(ninjas, "find", function(name){                         //#3
+			var ret = [];
+			for (var i = 0; i < this.values.length; i++)
+				if (this.values[i].indexOf(name) == 0)
+					ret.push(this.values[i]);
+			return ret;
+		});
+
+		addMethod(ninjas, "find", function(first, last){                 //#4
+			var ret = [];
+			for (var i = 0; i < this.values.length; i++)
+				if (this.values[i] == (first + " " + last))
+					ret.push(this.values[i]);
+			return ret;
+		});
+
+		assert(ninjas.find().length == 3,                                //#5
+					 "Found all ninjas");
+		assert(ninjas.find("Sam").length == 1,
+					 "Found ninja by first name");
+		assert(ninjas.find("Dean", "Edwards").length == 1,
+					 "Found ninja by first and last name");
+		assert(ninjas.find("Alex", "Russell", "Jr") == null,
+					 "Found nothing");
+		
 		</script>
 	</body>
 </html>
