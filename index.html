@@ -2,36 +2,28 @@
 <html>
 	<head>
 		<title>JS Test Suite</title>
-		 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
 		<script type="text/javascript" src="js/assert.js"></script>
 		<link href="css/assert.css" rel="stylesheet" type="text/css">
-		<style type="text/css">
-      #box { position: absolute; border: 3px solid blue; width: 200px; height: 200px; background-color: #6495ed; font-size: 2em; }
-    </style>
 	</head>
 	<body>
-		 <div id="box"> ボックス </div>
+		<button id="test">Click Me!</button>
     <script>
-		function animateIt(elementId) {
-			var elem = document.getElementById(elementId);
-			var tick = 0;
-
-			var timer = setInterval(function() {
-				if(tick < 100) {
-					elem.style.left = elem.style.top = tick + "px";
-					tick++;
-				} else {
-					clearInterval(timer);
-					assert(tick == 100,
-								"Tick accessed via a closure.");
-					assert(elem,
-								"element accessed via a closure.");
-					assert(timer,
-								"timer accessed via a closure.");
-				}
-			}, 10);
+		function bind(context, name) {
+			return function() {
+				return context[name].apply(context, arguments);
+			};
 		}
-		animateIt('box');
+		var button = {
+			clicked : false,
+
+			click : function() {
+				this.clicked = true;
+				assert(button.clicked,"The button has been clicked");
+				console.log(this);
+			}
+		};
+		var elem = document.getElementById('test');
+		elem.addEventListener('click', bind(button, 'click'), false);
     </script>
 	</body>
 </html>
