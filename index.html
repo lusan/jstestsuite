@@ -3,27 +3,19 @@
 	<head>
 		<title>JS Test Suite</title>
 		<script type="text/javascript" src="js/assert.js"></script>
+		<script type="text/javascript" src="js/partial.js"></script>
 		<link href="css/assert.css" rel="stylesheet" type="text/css">
 	</head>
 	<body>
-		<button id="test">Click Me!</button>
     <script>
-		function bind(context, name) {
-			return function() {
-				return context[name].apply(context, arguments);
-			};
-		}
-		var button = {
-			clicked : false,
+		String.prototype.csv = String.prototype.split.partial(/,\s*/);
 
-			click : function() {
-				this.clicked = true;
-				assert(button.clicked,"The button has been clicked");
-				console.log(this);
-			}
-		};
-		var elem = document.getElementById('test');
-		elem.addEventListener('click', bind(button, 'click'), false);
+		var results = ("Mugan, hugan, kugan").csv();
+		console.log(results);
+		assert(results[0]=="Mugan" &&
+					results[1]=="hugan" &&
+					results[2]=="kugan",
+					"The text values were split properly");
     </script>
 	</body>
 </html>
