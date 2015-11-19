@@ -8,14 +8,27 @@
 	</head>
 	<body>
     <script>
-		String.prototype.csv = String.prototype.split.partial(/,\s*/);
+			Function.prototype.memoized = function(key) {
+				this._values = this._values || {};
+				return this._values[key] !== undefined ?
+					this._values[key] :
+					this._values[key] = this.apply(this, arguments);
+			};
 
-		var results = ("Mugan, hugan, kugan").csv();
-		console.log(results);
-		assert(results[0]=="Mugan" &&
-					results[1]=="hugan" &&
-					results[2]=="kugan",
-					"The text values were split properly");
+			function isPrime(num) {
+				var prime = num != 1;
+				for(var i =2; i < num; i++) {
+					if(num % i == 0) {
+						prime = false;
+						break;
+					}
+				}
+				return prime;
+			}
+			assert(isPrime.memoized(5),
+							"The function works; 5 is prime.");
+							assert(isPrime._values[5],
+							"The answer has been cached.");
     </script>
 	</body>
 </html>
